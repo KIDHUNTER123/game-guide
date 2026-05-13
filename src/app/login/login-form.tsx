@@ -36,8 +36,16 @@ export function LoginForm() {
       return
     }
 
-    const redirectTo = searchParams.get("redirect") || "/"
-    router.push(redirectTo)
+    // Check session to determine redirect based on role
+    const sessionRes = await fetch("/api/auth/session")
+    const session = await sessionRes.json()
+    const role = session?.user?.role
+
+    if (role === "ADMIN" || role === "EDITOR") {
+      router.push("/admin")
+    } else {
+      router.push(searchParams.get("redirect") || "/")
+    }
     router.refresh()
   }
 
