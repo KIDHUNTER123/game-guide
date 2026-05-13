@@ -47,6 +47,13 @@ async function main() {
     },
   })
 
+  // Create categories
+  const [catAction, catAdventure, catRPG] = await Promise.all([
+    db.category.create({ data: { name: "动作" } }),
+    db.category.create({ data: { name: "冒险" } }),
+    db.category.create({ data: { name: "角色扮演" } }),
+  ])
+
   // Create games
   const games = await Promise.all([
     db.game.create({
@@ -54,8 +61,13 @@ async function main() {
         title: "艾尔登法环",
         slug: "elden-ring",
         coverImage: "",
+        pinyin: "ai er deng fa huan",
         description: "《艾尔登法环》是FromSoftware开发的开放世界动作RPG，由乔治·R·R·马丁参与世界观构建。玩家将探索广袤的「交界地」，挑战强大的半神Boss，成为艾尔登之王。",
-        category: "动作",
+        popular: true,
+        categories: { create: [
+          { category: { connect: { name: "动作" } } },
+          { category: { connect: { name: "角色扮演" } } },
+        ]},
       },
     }),
     db.game.create({
@@ -63,8 +75,13 @@ async function main() {
         title: "塞尔达传说：王国之泪",
         slug: "zelda-totk",
         coverImage: "",
+        pinyin: "sai er da chuan shuo wang guo zhi lei",
         description: "《塞尔达传说：王国之泪》是任天堂推出的开放世界冒险游戏。林克将探索海拉鲁的天空与地底，使用全新能力解开谜题、击败敌人。",
-        category: "冒险",
+        popular: true,
+        categories: { create: [
+          { category: { connect: { name: "冒险" } } },
+          { category: { connect: { name: "动作" } } },
+        ]},
       },
     }),
     db.game.create({
@@ -72,8 +89,12 @@ async function main() {
         title: "原神",
         slug: "genshin-impact",
         coverImage: "",
+        pinyin: "yuan shen",
         description: "《原神》是一款开放世界动作RPG，玩家将在提瓦特大陆冒险，使用元素之力战斗，探索七国的秘密。",
-        category: "角色扮演",
+        categories: { create: [
+          { category: { connect: { name: "角色扮演" } } },
+          { category: { connect: { name: "冒险" } } },
+        ]},
       },
     }),
     db.game.create({
@@ -81,8 +102,11 @@ async function main() {
         title: "博德之门3",
         slug: "baldurs-gate-3",
         coverImage: "",
+        pinyin: "bo de zhi men 3",
         description: "《博德之门3》是Larian Studios开发的CRPG巨作，基于D&D第五版规则。玩家将在被遗忘的国度中展开史诗冒险。",
-        category: "角色扮演",
+        categories: { create: [
+          { category: { connect: { name: "角色扮演" } } },
+        ]},
       },
     }),
   ])
